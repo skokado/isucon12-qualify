@@ -1,5 +1,3 @@
-version: '3.0'
-
 services:
   nginx:
     image: nginx:1.22
@@ -10,10 +8,9 @@ services:
     ports:
       - "443:443"
     network_mode: host
-    restart: always
 
   webapp:
-    build: ./webapp/go
+    build: ./webapp/python
     environment:
       ISUCON_DB_HOST: mysql
       ISUCON_DB_PORT: 3306
@@ -23,6 +20,7 @@ services:
       ISUCON_ADMIN_HOSTNAME: admin.t.isucon.dev
     ports:
       - "3000:3000"
+      - "5678:5678" # for Devcontainer debugging
     links:
       - mysql
     volumes:
@@ -31,7 +29,7 @@ services:
       - initial_data:/home/isucon/initial_data
       - gopkg:/home/isucon/go/pkg
     init: true
-    restart: always
+    command: ["python", "-m", "debugpy", "--listen", "0.0.0.0:5678", "main.py"]
 
   mysql:
     image: mysql/mysql-server:8.0.31
@@ -43,14 +41,12 @@ services:
       - mysql:/var/lib/mysql
     ports:
       - 13306:3306
-    restart: always
 
   blackauth:
     build: ./webapp/go
     ports:
       - "3001:3001"
     init: true
-    restart: always
     volumes:
       - .:/home/isucon
     working_dir: /home/isucon/blackauth
