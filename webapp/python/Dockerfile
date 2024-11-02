@@ -10,7 +10,7 @@ RUN apt-get update && \
   apt-get -y update && \
   apt-get -y install default-mysql-client build-essential libssl-dev libffi-dev python3-dev cargo
 
-RUN useradd --uid=1001 --create-home isucon
+RUN useradd --uid=1002 --create-home isucon
 USER isucon
 
 RUN mkdir -p /home/isucon/webapp/python

@@ -10,7 +10,7 @@ RUN apt-get update && \
   apt-get -y update && \
   apt-get -y install default-mysql-client
 
-RUN useradd --uid=1001 --create-home isucon
+RUN useradd --uid=1002 --create-home isucon
 USER isucon
 
 RUN mkdir -p /home/isucon/webapp/go
