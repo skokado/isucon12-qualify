@@ -21,4 +21,7 @@ RUN pip install -r requirements.txt
 
 COPY --chown=isucon:isucon ./ /home/isucon/webapp/python/
 
+# TOOD: remove finally
+RUN pip install debugpy
+
 CMD [ "python", "main.py" ]

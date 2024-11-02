@@ -1,5 +1,43 @@
 # ISUCON12 予選問題
 
+## 追記 (Kokado)
+
+起動手順
+
+```bash
+git clone
+docker-compose up
+
+# データ準備
+docker-compose exec  -u 0:0 -w /home/isucon bench bash -c '
+curl -LO https://github.com/isucon/isucon12-qualify/releases/download/data%2F20220712_1505-745a3fdfb5783afc048ecaebd054acd20151872d/initial_data.tar.gz
+tar xf initial_data.tar.gz
+chown -R isucon:isucon /home/isucon
+'
+
+docker-compose exec -w /home/isucon/data bench make build-for-docker-compose
+curl -k -XPOST https://127.0.0.1/initialize
+
+# ベンチマーク実行
+cd bench
+make bench
+./bench
+
+# ログ出力する場合
+mkdir -p ./results
+./bench > ./results/benchmark_$(git show --format='%H' --no-patch).log
+
+# ベンチマーク先のIPアドレスを指定する場合（GHA で使える)
+./bench -target-addr [tbw]
+./bench -target-addr [tbw] > ./results/benchmark_$(git show --format='%H' --no-patch).log
+```
+
+=>
+https://admin.t.isucon.dev
+https://isucon.t.isucon.dev
+https://kayac.t.isucon.dev
+
+
 ## ディレクトリ構成
 
 ```
