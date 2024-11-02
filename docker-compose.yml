@@ -25,7 +25,8 @@ services:
       - mysql
     volumes:
       - ./webapp:/home/isucon/webapp
-      - tenant_db:/home/isucon/webapp/tenant_db
+      # - tenant_db:/home/isucon/webapp/tenant_db
+      - ./webapp/tenant_db:/home/isucon/webapp/tenant_db # tenant_db/*.db の内容を確認するためにバインドマウントにする
       - initial_data:/home/isucon/initial_data
       - gopkg:/home/isucon/go/pkg
     init: true
@@ -63,7 +64,8 @@ services:
       ISUCON_JWT_KEY_FILE: ./isuports.pem
     volumes:
       - .:/home/isucon
-      - tenant_db:/home/isucon/webapp/tenant_db
+      # - tenant_db:/home/isucon/webapp/tenant_db
+      - ./webapp/tenant_db:/home/isucon/webapp/tenant_db
       - initial_data:/home/isucon/initial_data
       - gopkg:/home/isucon/go/pkg
     network_mode: host
@@ -76,5 +78,5 @@ services:
 volumes:
   mysql:
   gopkg:
-  tenant_db:
+  # tenant_db:
   initial_data:

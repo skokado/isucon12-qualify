@@ -30,7 +30,6 @@ ROLE_NONE = "none"
 # 正しいテナント名の正規表現
 TENANT_NAME_REGEXP = re.compile(r"^[a-z][a-z0-9-]{0,61}[a-z0-9]$")
 
-admin_db: Engine = None
 
 app = Flask(__name__)
 
@@ -44,6 +43,9 @@ def connect_admin_db() -> Engine:
     database = os.getenv("ISUCON_DB_NAME", "isuports")
 
     return create_engine(f"mysql+mysqlconnector://{user}:{password}@{host}:{port}/{database}", pool_size=10)
+
+
+admin_db = connect_admin_db()
 
 
 def tenant_db_path(id: int) -> str:
@@ -93,8 +95,8 @@ def add_header(response):
 
 
 def run():
-    global admin_db
-    admin_db = connect_admin_db()
+    # global admin_db
+    # admin_db = connect_admin_db()
 
     app.run(host="0.0.0.0", port=3000, debug=True, threaded=True)
 
@@ -131,6 +133,7 @@ def parse_viewer() -> Viewer:
     if not token_str:
         abort(401, f"cookie {COOKIE_NAME} is not found")
 
+    # TODO キャッシュするか、グローバル化する
     key_filename = os.getenv("ISUCON_JWT_KEY_FILE", "../public.pem")
     key = open(key_filename, "r").read()
 
@@ -339,7 +342,6 @@ def validate_tenant_name(name):
     """テナント名が規則に沿っているかチェックする"""
     if TENANT_NAME_REGEXP.match(name) is None:
         abort(400, f"invalid tenant name: {name}")
-
 
 @dataclass
 class BillingReport:
