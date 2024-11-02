@@ -1,6 +1,6 @@
 services:
   nginx:
-    image: nginx:1.22
+    image: nginx:stable-alpine
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d
       - ./nginx/tls:/etc/nginx/tls
